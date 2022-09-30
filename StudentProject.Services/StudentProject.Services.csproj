@@ -4,4 +4,14 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StudentProject.Data\StudentProject.Data.csproj" />
+    <ProjectReference Include="..\StudentProject.Entities\StudentProject.Entities.csproj" />
+    <ProjectReference Include="..\StudentProject.Shared\StudentProject.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
