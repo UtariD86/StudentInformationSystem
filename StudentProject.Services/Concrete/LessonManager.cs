@@ -34,9 +34,29 @@ namespace StudentProject.Services.Concrete
             },ResultStatus.Success, $"{lessonAddDto.Name} adlı ders başarıyla eklendi.");
         }
 
-        public Task<IDataResult<LessonDto>> Delete(int lessonid, string modifiedByName)
+        public async Task<IDataResult<LessonDto>> Delete(int lessonid, string modifiedByName)
         {
-            throw new NotImplementedException();
+            var lesson = await _unitOfWork.Lessons.GetAsync(s => s.Id == lessonid);
+            if (lesson != null)
+            {
+                lesson.IsDeleted = true;
+                lesson.ModifiedByName = modifiedByName;
+                lesson.ModifiedDate = DateTime.Now;
+                var deletedLesson = await _unitOfWork.Lessons.UpdateAsync(lesson);
+                await _unitOfWork.SaveAsync();
+                return new DataResult<LessonDto>(new LessonDto
+                {
+                    Lesson = deletedLesson,
+                    ResultStatus = ResultStatus.Success,
+                    Message = $"{deletedLesson} named lesson is successfully deleted!"
+                }, ResultStatus.Success, $"{deletedLesson} adlı ders başarıyla silinmiştir");
+            }
+            return new DataResult<LessonDto>(new LessonDto
+            {
+                Lesson = null,
+                ResultStatus = ResultStatus.Success,
+                Message = "Lesson is not deleted!"
+            }, ResultStatus.Error, "İşlem gerçekleştirilemedi");
         }
 
         public async Task<IDataResult<LessonDto>> Get(int lessonid)
