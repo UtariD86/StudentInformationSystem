@@ -11,7 +11,6 @@ namespace StudentProject.Shared.Utilities.Results.Concrete
     public class DataResult<T> : IDataResult<T>
     {
 
-
         public DataResult(T data, ResultStatus resultStatus)
         {
             Data = data;

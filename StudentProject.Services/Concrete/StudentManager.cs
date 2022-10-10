@@ -84,14 +84,15 @@ namespace StudentProject.Services.Concrete
 
         public async Task<IDataResult<StudentListDto>> GetAll()
         {
-
-            var students = await _unitOfWork.Students.GetAllAsync();
-            if (students.Count > -1)
+            var query = _unitOfWork.Students.GetAsQuaryable();
+            var studentList =  query.ToList();
+            //var students = await _unitOfWork.Students.GetAllAsync();
+            if (studentList.Count > -1)
             {
                 return new DataResult<StudentListDto>(new StudentListDto
                 {
                     ResultStatus = ResultStatus.Success,
-                    Students = students,
+                    Students = studentList,
                 }, ResultStatus.Success);
             }
             return new DataResult<StudentListDto>(new StudentListDto
@@ -106,13 +107,16 @@ namespace StudentProject.Services.Concrete
 
         public async Task<IDataResult<StudentListDto>> GetAllByNonDeleted()
         {
-            var students = await _unitOfWork.Students.GetAllAsync(s => !s.IsDeleted);
-            if (students.Count > -1)
+            var query = _unitOfWork.Students.GetAsQuaryable();
+            query = query.Where(s => !s.IsDeleted);
+            var studentList = query.ToList();
+            //var students = await _unitOfWork.Students.GetAllAsync(s => !s.IsDeleted);
+            if (studentList.Count > -1)
             {
                 return new DataResult<StudentListDto>(new StudentListDto
                 {
                     ResultStatus = ResultStatus.Success,
-                    Students = students,
+                    Students = studentList,
                 }, ResultStatus.Success);
             }
             return new DataResult<StudentListDto>(new StudentListDto
@@ -127,13 +131,16 @@ namespace StudentProject.Services.Concrete
 
         public async Task<IDataResult<StudentListDto>> GetAllByNonDeletedAndActive()
         {
-            var students = await _unitOfWork.Students.GetAllAsync(s => s.IsActive && !s.IsDeleted);
-            if (students.Count > -1)
+            var query = _unitOfWork.Students.GetAsQuaryable();
+            query = query.Where(s => !s.IsDeleted&&s.IsActive);
+            var studentList =  query.ToList();
+            //var students = await _unitOfWork.Students.GetAllAsync(s => s.IsActive && !s.IsDeleted);
+            if (studentList.Count > -1)
             {
                 return new DataResult<StudentListDto>(new StudentListDto
                 {
                     ResultStatus = ResultStatus.Success,
-                    Students = students,
+                    Students = studentList,
                 }, ResultStatus.Success);
             }
             return new DataResult<StudentListDto>(new StudentListDto
@@ -153,7 +160,7 @@ namespace StudentProject.Services.Concrete
             {
                 await _unitOfWork.Students.DeleteAsync(student);
                 await _unitOfWork.SaveAsync();
-                return new Result(ResultStatus.Success, "Tamamen silindi!");
+                return new Result(ResultStatus.Success, "Student is hard deleted!");
             }
             return new Result(ResultStatus.Error, "Öğrenci bulunamadı");
         }

@@ -11,7 +11,7 @@ namespace StudentProject.Shared.Data.Abstract
     public interface IEntityRepository<T> where T : class,IEntity,new()
     {
         Task<T> GetAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);//var kullanici = repository.GetAsync(k=>k.Id==15)
-
+        IQueryable<T> GetAsQuaryable();
         Task<IList<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null,
             params Expression<Func<T, object>>[] includeProperties);
 

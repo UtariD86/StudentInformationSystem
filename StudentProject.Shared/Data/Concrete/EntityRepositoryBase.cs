@@ -55,6 +55,11 @@ namespace StudentProject.Shared.Data.Concrete
             return await query.ToListAsync();
         }
 
+        public IQueryable<TEntity> GetAsQuaryable()
+        {
+            return _dbContext.Set<TEntity>().AsQueryable();
+        }
+
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
         {
             IQueryable<TEntity> query = _dbContext.Set<TEntity>();
